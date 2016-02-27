@@ -8,3 +8,7 @@ try:
 except HTTPError as e:
     print e
 ```
+To run tests execute:
+```
+python -m tornado.test.runtests auto_test_SmartAsyncHttpClient
+```

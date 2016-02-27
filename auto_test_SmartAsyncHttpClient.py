@@ -1,7 +1,7 @@
 from tornado.testing import AsyncHTTPTestCase, AsyncHTTPSTestCase, gen_test
 from tornado.httpclient import AsyncHTTPClient, HTTPError
 from tornado import gen
-import testSmartTimeout
+import SmartAsyncHttpClient
 import os
 import random
 
@@ -69,7 +69,7 @@ class TestHTTPSmartTimeout(AsyncHTTPTestCase):
         print "Requesting: {}".format(url)
         http_client = AsyncHTTPClient(max_body_size=10485760000,
                                       io_loop=self.io_loop)
-        http_fetcher = testSmartTimeout.GuarantedHTTPFetcher(
+        http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
             http_client,
             inactive_timeout=smart_timeout)
@@ -96,7 +96,7 @@ class TestHTTPSSmartTimeout(AsyncHTTPSTestCase):
         print "Requesting: {}".format(url)
         http_client = AsyncHTTPClient(max_body_size=10485760000,
                                       io_loop=self.io_loop)
-        http_fetcher = testSmartTimeout.GuarantedHTTPFetcher(
+        http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
             http_client,
             inactive_timeout=smart_timeout,
@@ -141,7 +141,7 @@ class TestRetryableCodesGuarantedHTTPFetcher(AsyncHTTPTestCase):
         print "Requesting: {}".format(url)
         http_client = AsyncHTTPClient(max_body_size=10485760000,
                                       io_loop=self.io_loop)
-        http_fetcher = testSmartTimeout.GuarantedHTTPFetcher(
+        http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
             http_client,
             inactive_timeout=smart_timeout)
@@ -173,7 +173,7 @@ class TestSuccessGuarantedHTTPFetcher(AsyncHTTPTestCase):
         print "Requesting: {}".format(url)
         http_client = AsyncHTTPClient(max_body_size=10485760000,
                                       io_loop=self.io_loop)
-        http_fetcher = testSmartTimeout.GuarantedHTTPFetcher(
+        http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
             http_client,
             inactive_timeout=smart_timeout)
