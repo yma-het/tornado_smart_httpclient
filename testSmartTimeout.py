@@ -85,10 +85,10 @@ class GuarantedHTTPRequest(HTTPRequest):
 
 class GuarantedHTTPFetcher(object):
     def __init__(self, url, http_client, inactive_timeout=1, req_opts={}):
-        self.chunks = []
+        self._chunks = []
 
         def get_chunk(data):
-            self.chunks.append(data)
+            self._chunks.append(data)
 
         self.http_client = http_client
         self.httprequest = GuarantedHTTPRequest(url,
@@ -105,7 +105,10 @@ class GuarantedHTTPFetcher(object):
         combined_fetch_future = self.httprequest.timeout_future
         res = yield combined_fetch_future
         self.httprequest.done()
-        res.body = "".join(self.chunks)
+        try:
+            res.body = "".join(self._chunks)
+        except AttributeError:
+            res._body = "".join(self._chunks)
         raise gen.Return(res)
 
 
