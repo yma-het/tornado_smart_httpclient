@@ -71,7 +71,7 @@ class TestHTTPSmartTimeout(AsyncHTTPTestCase):
                                       io_loop=self.io_loop)
         http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
-            http_client,
+            http_client=http_client,
             inactive_timeout=smart_timeout)
         http_fetcher._io_loop = self.io_loop
         try:
@@ -98,7 +98,7 @@ class TestHTTPSSmartTimeout(AsyncHTTPSTestCase):
                                       io_loop=self.io_loop)
         http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
-            http_client,
+            http_client=http_client,
             inactive_timeout=smart_timeout,
             req_opts={"validate_cert": False})
         http_fetcher._io_loop = self.io_loop
@@ -143,7 +143,7 @@ class TestRetryableCodesGuarantedHTTPFetcher(AsyncHTTPTestCase):
                                       io_loop=self.io_loop)
         http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
-            http_client,
+            http_client=http_client,
             inactive_timeout=smart_timeout)
         http_fetcher._io_loop = self.io_loop
         try:
@@ -175,7 +175,7 @@ class TestSuccessGuarantedHTTPFetcher(AsyncHTTPTestCase):
                                       io_loop=self.io_loop)
         http_fetcher = SmartAsyncHttpClient.GuarantedHTTPFetcher(
             url,
-            http_client,
+            http_client=http_client,
             inactive_timeout=smart_timeout)
         http_fetcher._io_loop = self.io_loop
         response = yield http_fetcher.fetch()

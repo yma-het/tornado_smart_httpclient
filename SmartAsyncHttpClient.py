@@ -84,7 +84,7 @@ class GuarantedHTTPRequest(HTTPRequest):
 
 
 class GuarantedHTTPFetcher(object):
-    def __init__(self, url, http_client, inactive_timeout=1, req_opts={}):
+    def __init__(self, url, http_client=AsyncHTTPClient(), inactive_timeout=1, req_opts={}):
         self._chunks = []
 
         def get_chunk(data):
