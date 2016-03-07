@@ -35,8 +35,6 @@ def lazy_chain_future(a, b):
 # url = "http://localhost:1488/"
 url = "https://registry.npmjs.org/007/-/007-0.0.0.tgz"
 
-http_client = AsyncHTTPClient(max_body_size=10485760000, force_instance=True)
-
 
 class GuarantedHTTPRequest(HTTPRequest):
     def __init__(self, *args, **kwargs):
@@ -84,18 +82,26 @@ class GuarantedHTTPRequest(HTTPRequest):
 
 
 class GuarantedHTTPFetcher(object):
-    def __init__(self, url, http_client=AsyncHTTPClient(), inactive_timeout=1, req_opts={}):
+    def __init__(self, url, http_client=None, ioloop_inst=ioloop.IOLoop.current(), inactive_timeout=1, req_opts={}):
         self._chunks = []
 
         def get_chunk(data):
             self._chunks.append(data)
 
+        if not http_client:
+            http_client = AsyncHTTPClient(io_loop=ioloop_inst)
         self.http_client = http_client
-        self.httprequest = GuarantedHTTPRequest(url,
-                                                request_timeout=365*24*60*60,
-                                                streaming_callback=get_chunk,
-                                                inactive_timeout=1,
-                                                **req_opts)
+
+
+        if not ("request_timeout" in req_opts):
+            req_opts["request_timeout"] = 365*24*60*60
+
+        self.httprequest = GuarantedHTTPRequest(
+            url,
+            streaming_callback=get_chunk,
+            inactive_timeout=inactive_timeout,
+            **req_opts
+        )
 
     @gen.coroutine
     def fetch(self):
@@ -114,6 +120,7 @@ class GuarantedHTTPFetcher(object):
 
 @gen.coroutine
 def start_test():
+    http_client = AsyncHTTPClient(max_body_size=10485760000, force_instance=True)
     http_fetcher = GuarantedHTTPFetcher(url, http_client)
     try:
         response = yield http_fetcher.fetch()
